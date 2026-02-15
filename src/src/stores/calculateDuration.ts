@@ -1,19 +1,38 @@
 import { defineStore } from 'pinia';
 
 export const useCalculateDuration = defineStore('calculateDuration', () => {
+  const parseYearMonth = (yearMonth: string) => {
+    if (yearMonth === '現在') {
+      const now = new Date();
+      return { year: now.getFullYear(), month: now.getMonth() + 1 };
+    }
+
+    const matched = yearMonth.match(/^(\d{4})\/(0[1-9]|1[0-2])$/);
+    if (!matched) {
+      return null;
+    }
+
+    return { year: Number(matched[1]), month: Number(matched[2]) };
+  };
+
   const calculateDuration = (startDate: string, endDate: string) => {
-    const start = new Date(`${startDate}/01`);
-    const end = new Date(`${endDate}/01`);
+    const start = parseYearMonth(startDate);
+    const end = parseYearMonth(endDate);
 
-    const yearDiff = end.getFullYear() - start.getFullYear();
-    const monthDiff = end.getMonth() - start.getMonth();
+    if (!start || !end) {
+      return { years: 0, months: 0 };
+    }
 
-    let durationYears = yearDiff;
-    let durationMonths = monthDiff;
+    let durationYears = end.year - start.year;
+    let durationMonths = end.month - start.month;
 
-    if (monthDiff < 0) {
+    if (durationMonths < 0) {
       durationYears--;
       durationMonths += 12;
+    }
+
+    if (durationYears < 0) {
+      return { years: 0, months: 0 };
     }
 
     return { years: durationYears, months: durationMonths };
