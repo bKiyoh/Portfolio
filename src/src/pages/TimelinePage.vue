@@ -69,7 +69,7 @@ onBeforeMount(() => {
     <v-row>
       <v-col>
         <v-card color="transparent">
-          <v-tabs v-model="tab" align-tabs="center" grow slider-color="grey-darken-3">
+          <v-tabs v-model="tab" align-tabs="center" grow slider-color="primary" color="primary">
             <template v-for="(tabValue, i) of tabValues" :key="i">
               <v-tab class="no-uppercase" :value="tabValue.value">{{ tabValue.label }}</v-tab>
             </template>

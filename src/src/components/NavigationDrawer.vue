@@ -84,7 +84,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <v-app-bar app :elevation="0" color="rgba(18, 18, 18, 0.94)">
+  <v-app-bar app :elevation="0" color="#dfe7e4" class="site-header">
     <v-container
       class="header-container"
       :style="{
@@ -116,6 +116,11 @@ onBeforeUnmount(() => {
   gap: 24px;
   height: 100%;
   padding-block: 0;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--color-line);
+  box-shadow: none !important;
 }
 
 .brand {
@@ -152,7 +157,7 @@ onBeforeUnmount(() => {
   padding: 0 12px;
   border: 0;
   background: transparent;
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(23, 63, 57, 0.62);
   font-family: inherit;
   font-size: 0.8rem;
   cursor: pointer;
@@ -174,7 +179,7 @@ onBeforeUnmount(() => {
 
 .nav-item:hover,
 .nav-item--active {
-  color: #fff;
+  color: var(--color-ink);
 }
 
 .nav-item--active::after {

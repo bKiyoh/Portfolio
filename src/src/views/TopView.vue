@@ -40,9 +40,20 @@ import ProductPage from '@/pages/ProductPage.vue';
 }
 
 .page-section {
+  position: relative;
   min-height: 70vh;
   padding: 72px 0 96px;
   scroll-margin-top: 64px;
+}
+
+.page-section:not(.page-section--home)::before {
+  position: absolute;
+  top: 0;
+  right: 24px;
+  left: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-line), transparent);
+  content: '';
 }
 
 .page-section--home {
@@ -58,16 +69,17 @@ import ProductPage from '@/pages/ProductPage.vue';
   gap: 14px;
   margin: 0 24px 24px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  border-bottom: 1px solid var(--color-line);
 }
 
 .section-heading span {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(23, 63, 57, 0.58);
   font-size: 0.75rem;
   letter-spacing: 0.12em;
 }
 
 .section-heading h2 {
+  color: var(--color-ink);
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 900;
   letter-spacing: 0.04em;

@@ -85,7 +85,7 @@ const getIconName = (jobIcon: string) => {
   <v-timeline side="end" align="start" v-if="$vuetify.display?.mdAndUp">
     <v-timeline-item
       size="x-small"
-      dot-color="grey-darken-3"
+      dot-color="primary"
       v-for="career in careerList"
       :key="career.careerId"
     >
@@ -117,7 +117,7 @@ const getIconName = (jobIcon: string) => {
               {{ prefixTitle(achieve.genre) }}
               <template v-if="achieve.genre === 'soloDev'">
                 <a
-                  class="ps-1 text-decoration-underline text-blue-lighten-4 font-weight-bold"
+                  class="product-link ps-1 text-decoration-underline font-weight-bold"
                   style="cursor: pointer"
                   @click="onShowProductDetails(achieve)"
                 >
@@ -131,7 +131,7 @@ const getIconName = (jobIcon: string) => {
 
             <v-card-text
               v-if="achieve.responsibility"
-              class="mt-2 pa-1 font-weight-thin text-grey-lighten-1"
+              class="achievement-copy mt-2 pa-1 font-weight-thin"
             >
               <p v-if="achieve.description">{{ achieve.description }}</p>
               <p class="mb-1" v-if="achieve.responsibility">担当:{{ achieve.responsibility }}</p>
@@ -197,4 +197,12 @@ const getIconName = (jobIcon: string) => {
   />
 </template>
 
-<style scoped></style>
+<style scoped>
+.product-link {
+  color: var(--color-accent-blue);
+}
+
+.achievement-copy {
+  color: rgba(23, 63, 57, 0.72);
+}
+</style>

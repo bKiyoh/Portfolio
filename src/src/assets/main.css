@@ -1,12 +1,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;900&display=swap');
 
+:root {
+  --color-canvas: #e8ece9;
+  --color-surface: #f6f7f3;
+  --color-header: #dfe7e4;
+  --color-accent-blue: #3489b5;
+  --color-accent-green: #799652;
+  --color-mist: #eef0e9;
+  --color-primary: #2f7466;
+  --color-ink: #173f39;
+  --color-line: rgba(47, 116, 102, 0.24);
+}
+
 html {
   scroll-behavior: smooth;
+  background: var(--color-canvas);
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
 }
 
 #app {
   font-family: 'Noto Sans JP', sans-serif;
   font-weight: 400;
+  color: var(--color-ink);
+  background:
+    radial-gradient(ellipse at 92% 8%, rgba(52, 137, 181, 0.17), transparent 28%),
+    radial-gradient(ellipse at 8% 38%, rgba(121, 150, 82, 0.2), transparent 32%),
+    linear-gradient(180deg, var(--color-header) 0%, var(--color-canvas) 32%, #e4e7dc 100%);
+}
+
+.v-application {
+  background: transparent !important;
+}
+
+.v-card {
+  border: 1px solid var(--color-line);
+  background-color: rgba(246, 247, 243, 0.9) !important;
+  box-shadow: 0 12px 32px rgba(23, 63, 57, 0.07) !important;
+}
+
+.v-card.bg-transparent {
+  border-color: transparent;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.v-chip {
+  border-color: var(--color-line);
+  background: rgba(121, 150, 82, 0.12);
+}
+
+::selection {
+  color: var(--color-surface);
+  background: var(--color-primary);
 }
 
 .fontNormal {

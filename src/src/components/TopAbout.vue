@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import profileData from '@/assets/data/profileData.json';
 import icon from '@/assets/images/icons/IMG_icon.png';
-import xIcon from '@/assets/images/icons/logo-white.png';
+import xIcon from '@/assets/images/icons/logo-black.png';
 import { mdiGithub } from '@mdi/js';
 </script>
 
