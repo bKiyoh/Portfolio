@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import { mdiHome, mdiAccount, mdiHammerWrench, mdiChevronRight, mdiTimelineOutline } from '@mdi/js';
-import { useRouter, useRoute } from 'vue-router';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { mdiHome, mdiAccount, mdiHammerWrench, mdiTimelineOutline } from '@mdi/js';
+import { useRouter } from 'vue-router';
 
-type Navigation = { label: string; name: string; icon: string };
+type Navigation = { label: string; id: string; icon: string };
 
 const props = defineProps({
   contentWidth: {
@@ -15,96 +15,189 @@ const props = defineProps({
 const navigation: Array<Navigation> = [
   {
     label: 'Home',
-    name: 'home',
+    id: 'home',
     icon: mdiHome
   },
   {
     label: 'About',
-    name: 'about',
+    id: 'about',
     icon: mdiAccount
   },
   {
     label: 'Timeline',
-    name: 'timeline',
+    id: 'timeline',
     icon: mdiTimelineOutline
   },
   {
     label: 'Product',
-    name: 'product',
+    id: 'product',
     icon: mdiHammerWrench
   }
 ];
 
 const router = useRouter();
-const route = useRoute();
+const activeSection = ref(window.location.hash.replace('#', '') || 'home');
+let ticking = false;
 
-const selectedRouter = ref<Navigation>(
-  navigation.find((item) => item.name === route.name) || navigation[0]
-);
+const updateActiveSection = () => {
+  const headerOffset = 96;
+  let currentSection = navigation[0].id;
 
-watch(
-  () => route.name,
-  (newRouteName) => {
-    const matchedNavigation = navigation.find((item) => item.name === newRouteName);
-    if (matchedNavigation) {
-      selectedRouter.value = matchedNavigation;
+  navigation.forEach(({ id }) => {
+    const section = document.getElementById(id);
+    if (section && section.getBoundingClientRect().top <= headerOffset) {
+      currentSection = id;
     }
-  },
-  { immediate: true }
-);
+  });
 
-const routerPush = (item: Navigation) => {
-  selectedRouter.value = item;
-  router.push({ name: item.name });
+  activeSection.value = currentSection;
+  ticking = false;
 };
 
-const filterNavigation = computed(() => {
-  return navigation.filter((item) => item.name !== selectedRouter.value.name);
+const onScroll = () => {
+  if (!ticking) {
+    window.requestAnimationFrame(updateActiveSection);
+    ticking = true;
+  }
+};
+
+const moveToSection = async (id: string) => {
+  activeSection.value = id;
+  const hash = `#${id}`;
+
+  if (window.location.hash === hash) {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+
+  await router.push({ name: 'home', hash });
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll, { passive: true });
+  updateActiveSection();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll);
 });
 </script>
 
 <template>
-  <v-app-bar app :elevation="0" color="rgba(18, 18, 18, 0.9)">
+  <v-app-bar app :elevation="0" color="rgba(18, 18, 18, 0.94)">
     <v-container
+      class="header-container"
       :style="{
         maxWidth: props.contentWidth
       }"
     >
-      <v-row>
-        <v-col cols="auto" class="d-flex align-center">
-          <v-toolbar-title class="fontBold">bKiyoh</v-toolbar-title>
-        </v-col>
-        <v-col cols="auto" class="d-flex align-center">
-          /&#x3000;
-          <v-speed-dial location="right center" transition="slide-x-transition">
-            <template v-slot:activator="{ props: activatorProps }">
-              <v-btn
-                class="no-uppercase"
-                v-bind="activatorProps"
-                :prepend-icon="selectedRouter.icon"
-                :append-icon="mdiChevronRight"
-                flat
-                >{{ selectedRouter.label }}
-              </v-btn>
-            </template>
-            <template v-for="(n, i) in filterNavigation" :key="i">
-              <v-btn
-                class="no-uppercase"
-                :icon="n.icon"
-                v-tooltip:bottom="n.label"
-                @click="routerPush(n)"
-                variant="plain"
-              ></v-btn>
-            </template>
-          </v-speed-dial>
-        </v-col>
-      </v-row>
+      <nav class="table-of-contents" aria-label="ページ内目次">
+        <button
+          v-for="item in navigation"
+          :key="item.id"
+          type="button"
+          class="nav-item"
+          :class="{ 'nav-item--active': activeSection === item.id }"
+          :aria-current="activeSection === item.id ? 'location' : undefined"
+          @click="moveToSection(item.id)"
+        >
+          <v-icon :icon="item.icon" size="16" />
+          <span>{{ item.label }}</span>
+        </button>
+      </nav>
     </v-container>
   </v-app-bar>
 </template>
 
 <style scoped>
-.no-uppercase {
-  text-transform: none;
+.header-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 100%;
+  padding-block: 0;
+}
+
+.brand {
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.table-of-contents {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  min-width: 0;
+  height: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.table-of-contents::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-item {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.62);
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: color 180ms ease;
+}
+
+.nav-item::after {
+  position: absolute;
+  right: 12px;
+  bottom: 0;
+  left: 12px;
+  height: 2px;
+  background: currentColor;
+  content: '';
+  opacity: 0;
+  transform: scaleX(0.4);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.nav-item:hover,
+.nav-item--active {
+  color: #fff;
+}
+
+.nav-item--active::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    gap: 10px;
+    padding-inline: 16px;
+  }
+
+  .brand {
+    font-size: 1rem;
+  }
+
+  .nav-item {
+    padding-inline: 9px;
+  }
+
+  .nav-item .v-icon {
+    display: none;
+  }
 }
 </style>

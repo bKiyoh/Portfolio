@@ -3,6 +3,17 @@ import TopView from '../views/TopView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior(to) {
+    if (to.hash) {
+      return {
+        el: to.hash,
+        top: 64,
+        behavior: 'smooth'
+      };
+    }
+
+    return { top: 0 };
+  },
   routes: [
     {
       path: '/',
@@ -12,22 +23,17 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      component: () => import('../views/AboutView.vue')
+      redirect: { name: 'home', hash: '#about' }
     },
     {
       path: '/timeline',
       name: 'timeline',
-      component: () => import('../views/TimelineView.vue')
+      redirect: { name: 'home', hash: '#timeline' }
     },
     {
       path: '/product',
       name: 'product',
-      component: () => import('../views/ProductView.vue')
-    },
-    {
-      path: '/contact',
-      name: 'contact',
-      component: () => import('../views/ContactView.vue')
+      redirect: { name: 'home', hash: '#product' }
     }
   ]
 });
