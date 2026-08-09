@@ -73,7 +73,7 @@ import ProductPage from '@/pages/ProductPage.vue';
 }
 
 .section-heading span {
-  color: rgba(23, 63, 57, 0.58);
+  color: var(--color-ink-muted);
   font-size: 0.75rem;
   letter-spacing: 0.12em;
 }

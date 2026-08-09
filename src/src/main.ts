@@ -12,22 +12,25 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 const app = createApp(App);
 
 const portfolioTheme: ThemeDefinition = {
-  dark: false,
+  dark: true,
   colors: {
-    background: '#e8ece9',
-    surface: '#f6f7f3',
-    primary: '#2f7466',
-    secondary: '#799652',
-    accent: '#3489b5',
-    error: '#a75652',
-    info: '#3489b5',
-    success: '#799652',
-    warning: '#b98b54',
-    'on-background': '#173f39',
-    'on-surface': '#173f39',
-    'surface-variant': '#d9ddc9',
-    'on-surface-variant': '#416158',
-    outline: '#8ba195'
+    background: '#0b1220',
+    surface: '#162238',
+    header: '#0f192a',
+    primary: '#91b7de',
+    secondary: '#e0b66f',
+    accent: '#e0b66f',
+    error: '#e18f92',
+    info: '#91b7de',
+    success: '#91b99c',
+    warning: '#e0b66f',
+    'on-background': '#f4f1ea',
+    'on-surface': '#f4f1ea',
+    'on-primary': '#0b1220',
+    'on-secondary': '#0b1220',
+    'surface-variant': '#1d2c45',
+    'on-surface-variant': '#bdc7d5',
+    outline: '#59708c'
   }
 };
 

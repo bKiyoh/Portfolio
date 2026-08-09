@@ -199,10 +199,10 @@ const getIconName = (jobIcon: string) => {
 
 <style scoped>
 .product-link {
-  color: var(--color-accent-blue);
+  color: var(--color-main);
 }
 
 .achievement-copy {
-  color: rgba(23, 63, 57, 0.72);
+  color: var(--color-ink-muted);
 }
 </style>

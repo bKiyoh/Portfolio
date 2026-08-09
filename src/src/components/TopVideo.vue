@@ -20,8 +20,8 @@
 <style scoped>
 .hero-video {
   display: block;
-  border: 1px solid rgba(47, 116, 102, 0.28);
-  box-shadow: 0 18px 42px rgba(23, 63, 57, 0.14);
+  border: 1px solid var(--color-line);
+  box-shadow: 0 18px 42px var(--color-shadow);
   filter: saturate(0.76) sepia(0.08) contrast(0.94);
 }
 </style>

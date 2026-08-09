@@ -1,15 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;900&display=swap');
 
 :root {
-  --color-canvas: #e8ece9;
-  --color-surface: #f6f7f3;
-  --color-header: #dfe7e4;
-  --color-accent-blue: #3489b5;
-  --color-accent-green: #799652;
-  --color-mist: #eef0e9;
-  --color-primary: #2f7466;
-  --color-ink: #173f39;
-  --color-line: rgba(47, 116, 102, 0.24);
+  color-scheme: dark;
+  --color-canvas: #0b1220;
+  --color-surface: #162238;
+  --color-header: #0f192a;
+  --color-main: #91b7de;
+  --color-accent: #e0b66f;
+  --color-mist: #1d2c45;
+  --color-primary: var(--color-main);
+  --color-ink: #f4f1ea;
+  --color-ink-muted: #bdc7d5;
+  --color-line: #59708c;
+  --color-shadow: rgba(0, 0, 0, 0.34);
 }
 
 html {
@@ -27,9 +30,9 @@ body {
   font-weight: 400;
   color: var(--color-ink);
   background:
-    radial-gradient(ellipse at 92% 8%, rgba(52, 137, 181, 0.17), transparent 28%),
-    radial-gradient(ellipse at 8% 38%, rgba(121, 150, 82, 0.2), transparent 32%),
-    linear-gradient(180deg, var(--color-header) 0%, var(--color-canvas) 32%, #e4e7dc 100%);
+    radial-gradient(ellipse at 92% 8%, rgba(145, 183, 222, 0.14), transparent 28%),
+    radial-gradient(ellipse at 8% 38%, rgba(224, 182, 111, 0.08), transparent 32%),
+    linear-gradient(180deg, var(--color-header) 0%, var(--color-canvas) 32%, #0c1525 100%);
 }
 
 .v-application {
@@ -38,8 +41,8 @@ body {
 
 .v-card {
   border: 1px solid var(--color-line);
-  background-color: rgba(246, 247, 243, 0.9) !important;
-  box-shadow: 0 12px 32px rgba(23, 63, 57, 0.07) !important;
+  background-color: rgba(22, 34, 56, 0.94) !important;
+  box-shadow: 0 12px 32px var(--color-shadow) !important;
 }
 
 .v-card.bg-transparent {
@@ -50,7 +53,12 @@ body {
 
 .v-chip {
   border-color: var(--color-line);
-  background: rgba(121, 150, 82, 0.12);
+  background: rgba(224, 182, 111, 0.12);
+}
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
 ::selection {

@@ -14,9 +14,9 @@ import image from '@/assets/images/IMG_top.jpg';
 
 <style scoped>
 .hero-image {
-  border: 1px solid rgba(47, 116, 102, 0.28);
+  border: 1px solid var(--color-line);
   border-radius: 18px;
-  box-shadow: 0 18px 42px rgba(23, 63, 57, 0.14);
+  box-shadow: 0 18px 42px var(--color-shadow);
   filter: saturate(0.78) sepia(0.06) contrast(0.94);
 }
 </style>
