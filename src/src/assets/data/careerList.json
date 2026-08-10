@@ -203,7 +203,7 @@
     "company": "自社サービス•SES事業会社",
     "position": "",
     "department": "システム開発事業部",
-    "responsibilities": "フロントエンド領域の個人開発を続け、その成果を生かして現職へ転職。Vue.jsを中心とした開発プロジェクトで、既存機能の改修、新規機能開発、Vue 3移行、コードレビューを担当している。",
+    "responsibilities": "フロントエンド領域の個人開発を続け、その成果を生かして現職へ転職。Vue.jsを中心とした開発プロジェクトで、既存機能の改修、新規機能開発、Vue 3移行、コードレビューに加え、C#によるバックエンド改修やMicrosoft Graph APIを利用した機能の調査・開発にも携わっている。また、GitHub CopilotなどのAI支援ツールを積極的に活用し、レビュー用プロンプトの作成やAI関連情報のチーム共有も行っている。",
     "achievements": [
       {
         "achievementId": 1,
@@ -232,13 +232,21 @@
         "achievementId": 2,
         "genre": "work",
         "title": "クラウド業務支援アプリ開発",
-        "description": "クラウド業務支援アプリのフロントエンド開発に参画。既存機能の改善と新規機能開発に加え、Vue 3への移行を進めている。",
+        "description": "クラウド業務支援アプリの開発に参画。Vue.jsを中心としたフロントエンド開発に加え、C#によるバックエンド改修やMicrosoft Graph APIを利用した機能の調査・開発も担当。GitHub CopilotなどのAI支援ツールを積極的に活用し、レビュー用プロンプトの作成やAI関連情報のチーム共有にも取り組んでいる。",
         "from": "2023/10",
         "to": "現在",
-        "responsibility": "フロントエンド開発",
+        "responsibility": "フロントエンド開発、バックエンド改修、技術調査",
         "teamSize": "9",
-        "technologyUsed": ["Vue2~3.x", "Vuetify3.x", "Stylus", "Vuex4.x"],
-        "scopeOfWork": "既存アプリの改修、新規機能追加、Vue3移行、コーディング、コードレビュー",
+        "technologyUsed": [
+          "Vue2~3.x",
+          "Vuetify3.x",
+          "Stylus",
+          "Vuex4.x",
+          "C#",
+          "Microsoft Graph API",
+          "GitHub Copilot"
+        ],
+        "scopeOfWork": "既存アプリの改修、新規機能追加、Vue3移行、C#によるバックエンド改修、Microsoft Graph APIを利用した機能調査・開発、コーディング、コードレビュー、テスト、レビュー用プロンプト作成、AI関連情報のキャッチアップ・チーム共有",
         "pageUrl": null,
         "gitHubSrc": null,
         "productId": null
@@ -297,6 +305,17 @@
         "pageUrl": "https://webgl-collection-sigma.vercel.app/vol8",
         "gitHubSrc": "https://github.com/bKiyoh/webgl-assignment-collection",
         "productId": "10"
+      },
+      {
+        "achievementId": 8,
+        "genre": "soloDev",
+        "title": "Md Converter",
+        "description": "自分が日常的に使うことを目的に作成したMarkdownエディター。MarkdownをSlack・Backlog・プレーンテキスト向けに変換でき、タブ編集、フォーカスモード、検索・置換、登録文字列への変換など、文章作成時の無駄な操作を減らす機能を実装しました。",
+        "from": "2026/07",
+        "technologyUsed": ["HTML", "TypeScript", "Vue3", "Vite", "Vitest", "ESLint"],
+        "pageUrl": "https://md-converter-10t.pages.dev/",
+        "gitHubSrc": "https://github.com/bKiyoh/md-converter",
+        "productId": "12"
       }
     ]
   }

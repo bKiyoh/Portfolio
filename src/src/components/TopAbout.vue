@@ -14,14 +14,24 @@ import { mdiGithub } from '@mdi/js';
       <div class="ma-3">
         <v-card-title class="text-h5">{{ profileData.name }} </v-card-title>
         <v-card-subtitle>{{ profileData.location }}</v-card-subtitle>
-        <v-btn :href="profileData.links.x" target="_blank" rel="noopener" variant="plain" x-small>
-          <v-img :src="xIcon" width="18"></v-img>
+        <v-btn
+          :href="profileData.links.x"
+          target="_blank"
+          rel="noopener"
+          aria-label="Xのプロフィールを見る"
+          icon
+          variant="plain"
+        >
+          <span class="x-icon-background">
+            <v-img :src="xIcon" width="14"></v-img>
+          </span>
         </v-btn>
         <v-btn
           :icon="mdiGithub"
           :href="profileData.links.github"
           target="_blank"
           rel="noopener"
+          aria-label="GitHubのプロフィールを見る"
           variant="plain"
         ></v-btn>
       </div>
@@ -42,4 +52,13 @@ import { mdiGithub } from '@mdi/js';
   </v-card>
 </template>
 
-<style scoped></style>
+<style scoped>
+.x-icon-background {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  place-items: center;
+}
+</style>
