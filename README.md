@@ -22,8 +22,8 @@
 - **Pinia** (^2.0.32)
   - Vue.js アプリケーションのための状態管理ライブラリである Pinia（バージョン 2.0.32）を使用し、データの管理や共有を行いました。
 
-- **Cloudflare Workers Static Assets**
-  - ビルド済みの静的ファイルを Cloudflare のネットワークから配信します。
+- **Cloudflare Pages**
+  - GitHubと連携し、ビルド済みの静的ファイルをCloudflareのネットワークから配信します。
 
 - **TypeScript** (~4.8.4)
   - 強力な静的型付け言語である TypeScript（バージョン 4.8.4）を導入し、コードの信頼性向上や開発効率の向上に貢献しました。

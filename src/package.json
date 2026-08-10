@@ -13,8 +13,7 @@
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
-    "check": "npm run lint && npm run format",
-    "deploy": "npm run build && wrangler deploy"
+    "check": "npm run lint && npm run format"
   },
   "dependencies": {
     "@mdi/js": "^7.2.96",
@@ -39,7 +38,6 @@
     "prettier": "^2.8.4",
     "typescript": "~4.8.4",
     "vite": "^8.1.4",
-    "vue-tsc": "^1.2.0",
-    "wrangler": "^4.120.0"
+    "vue-tsc": "^1.2.0"
   }
 }
