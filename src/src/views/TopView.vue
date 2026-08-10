@@ -60,7 +60,7 @@ import ProductPage from '@/pages/ProductPage.vue';
   min-height: calc(100vh - 64px);
   display: flex;
   align-items: center;
-  padding-top: 24px;
+  padding: 0;
 }
 
 .section-heading {
@@ -93,7 +93,7 @@ import ProductPage from '@/pages/ProductPage.vue';
 
   .page-section--home {
     min-height: calc(100svh - 64px);
-    padding-top: 0;
+    padding: 0;
   }
 
   .section-heading {
