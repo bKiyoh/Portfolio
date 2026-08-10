@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import { mdiHome, mdiAccount, mdiHammerWrench, mdiTimelineOutline } from '@mdi/js';
+import {
+  mdiAccount,
+  mdiClose,
+  mdiEmailOutline,
+  mdiHammerWrench,
+  mdiHome,
+  mdiMenu,
+  mdiTimelineOutline
+} from '@mdi/js';
 import { useRouter } from 'vue-router';
 
 type Navigation = { label: string; id: string; icon: string };
@@ -14,7 +22,7 @@ const props = defineProps({
 
 const navigation: Array<Navigation> = [
   {
-    label: 'Home',
+    label: 'Top',
     id: 'home',
     icon: mdiHome
   },
@@ -32,12 +40,20 @@ const navigation: Array<Navigation> = [
     label: 'Product',
     id: 'product',
     icon: mdiHammerWrench
+  },
+  {
+    label: 'Contact',
+    id: 'contact',
+    icon: mdiEmailOutline
   }
 ];
 
 const router = useRouter();
 const activeSection = ref(window.location.hash.replace('#', '') || 'home');
+const isMenuOpen = ref(activeSection.value !== 'home');
 let ticking = false;
+let pendingNavigationTarget: string | null = null;
+let navigationFallbackTimer: number | undefined;
 
 const updateActiveSection = () => {
   const headerOffset = 96;
@@ -50,7 +66,22 @@ const updateActiveSection = () => {
     }
   });
 
-  activeSection.value = currentSection;
+  if (pendingNavigationTarget) {
+    if (currentSection === pendingNavigationTarget) {
+      activeSection.value = currentSection;
+      isMenuOpen.value = true;
+      pendingNavigationTarget = null;
+      window.clearTimeout(navigationFallbackTimer);
+    }
+
+    ticking = false;
+    return;
+  }
+
+  if (activeSection.value !== currentSection) {
+    activeSection.value = currentSection;
+    isMenuOpen.value = currentSection !== 'home';
+  }
   ticking = false;
 };
 
@@ -62,8 +93,16 @@ const onScroll = () => {
 };
 
 const moveToSection = async (id: string) => {
+  pendingNavigationTarget = id;
   activeSection.value = id;
+  isMenuOpen.value = true;
   const hash = `#${id}`;
+
+  window.clearTimeout(navigationFallbackTimer);
+  navigationFallbackTimer = window.setTimeout(() => {
+    pendingNavigationTarget = null;
+    updateActiveSection();
+  }, 1500);
 
   if (window.location.hash === hash) {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -80,6 +119,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll);
+  window.clearTimeout(navigationFallbackTimer);
 });
 </script>
 
@@ -91,7 +131,24 @@ onBeforeUnmount(() => {
         maxWidth: props.contentWidth
       }"
     >
-      <nav class="table-of-contents" aria-label="ページ内目次">
+      <v-btn
+        class="menu-toggle"
+        :icon="isMenuOpen ? mdiClose : mdiMenu"
+        variant="text"
+        :aria-label="isMenuOpen ? 'メニューを閉じる' : 'メニューを開く'"
+        :aria-expanded="isMenuOpen"
+        aria-controls="site-navigation"
+        @click="isMenuOpen = !isMenuOpen"
+      />
+
+      <nav
+        id="site-navigation"
+        class="table-of-contents"
+        :class="{ 'table-of-contents--open': isMenuOpen }"
+        :aria-hidden="!isMenuOpen"
+        :inert="!isMenuOpen"
+        aria-label="ページ内目次"
+      >
         <button
           v-for="item in navigation"
           :key="item.id"
@@ -113,7 +170,7 @@ onBeforeUnmount(() => {
 .header-container {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 8px;
   height: 100%;
   padding-block: 0;
 }
@@ -123,25 +180,30 @@ onBeforeUnmount(() => {
   box-shadow: none !important;
 }
 
-.brand {
+.menu-toggle {
   flex: 0 0 auto;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  font-family: inherit;
-  font-size: 1.25rem;
-  cursor: pointer;
+  color: var(--color-ink);
 }
 
 .table-of-contents {
   display: flex;
+  flex: 1 1 auto;
   align-items: stretch;
   gap: 4px;
   min-width: 0;
   height: 100%;
   overflow-x: auto;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-10px);
+  transition: opacity 180ms ease, transform 180ms ease;
   scrollbar-width: none;
+}
+
+.table-of-contents--open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
 }
 
 .table-of-contents::-webkit-scrollbar {
@@ -192,10 +254,6 @@ onBeforeUnmount(() => {
   .header-container {
     gap: 10px;
     padding-inline: 16px;
-  }
-
-  .brand {
-    font-size: 1rem;
   }
 
   .nav-item {

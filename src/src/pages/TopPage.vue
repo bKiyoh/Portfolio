@@ -7,12 +7,7 @@ const TopThree = defineAsyncComponent(() => import('@/components/TopThree.vue'))
 
 <template>
   <v-container class="top-media">
-    <v-row
-      v-if="$vuetify.display?.mdAndUp"
-      class="hero-strip"
-      align="center"
-      no-gutters
-    >
+    <v-row v-if="$vuetify.display?.mdAndUp" class="hero-strip" align="center" no-gutters>
       <v-col cols="auto" class="three-column">
         <TopThree />
       </v-col>
@@ -52,8 +47,7 @@ const TopThree = defineAsyncComponent(() => import('@/components/TopThree.vue'))
   width: 100%;
   min-height: calc(100svh - 64px);
   place-items: center;
-  background:
-    radial-gradient(circle at 50% 48%, rgba(145, 183, 222, 0.1), transparent 42%),
+  background: radial-gradient(circle at 50% 48%, rgba(145, 183, 222, 0.1), transparent 42%),
     radial-gradient(circle at 50% 50%, rgba(224, 182, 111, 0.045), transparent 62%);
 }
 

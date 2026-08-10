@@ -3,8 +3,8 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="auto" class="text-center">
-        <h3>次のTwitterアカウントのDMにてご連絡ください</h3>
-        <a href="https://twitter.com/bKiyoh">https://twitter.com/bKiyoh</a>
+        <h3>次のXアカウントのDMにてご連絡ください</h3>
+        <a href="https://x.com/bKiyoh" target="_blank" rel="noopener"> https://x.com/bKiyoh </a>
       </v-col>
     </v-row>
   </v-container>

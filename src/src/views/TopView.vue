@@ -3,11 +3,12 @@ import TopPage from '@/pages/TopPage.vue';
 import AboutPage from '@/pages/AboutPage.vue';
 import TimelinePage from '@/pages/TimelinePage.vue';
 import ProductPage from '@/pages/ProductPage.vue';
+import ContactPage from '@/pages/ContactPage.vue';
 </script>
 
 <template>
   <div class="one-page">
-    <section id="home" class="page-section page-section--home" aria-label="Home">
+    <section id="home" class="page-section page-section--home" aria-label="Top">
       <TopPage />
     </section>
 
@@ -30,6 +31,13 @@ import ProductPage from '@/pages/ProductPage.vue';
         <h2 id="product-title">Product</h2>
       </header>
       <ProductPage />
+    </section>
+
+    <section id="contact" class="page-section" aria-labelledby="contact-title">
+      <header class="section-heading">
+        <h2 id="contact-title">Contact</h2>
+      </header>
+      <ContactPage />
     </section>
   </div>
 </template>

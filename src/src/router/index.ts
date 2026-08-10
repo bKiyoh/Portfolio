@@ -34,6 +34,11 @@ const router = createRouter({
       path: '/product',
       name: 'product',
       redirect: { name: 'home', hash: '#product' }
+    },
+    {
+      path: '/contact',
+      name: 'contact',
+      redirect: { name: 'home', hash: '#contact' }
     }
   ]
 });

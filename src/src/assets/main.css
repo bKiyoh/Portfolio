@@ -29,8 +29,7 @@ body {
   font-family: 'Noto Sans JP', sans-serif;
   font-weight: 400;
   color: var(--color-ink);
-  background:
-    radial-gradient(ellipse at 92% 8%, rgba(145, 183, 222, 0.14), transparent 28%),
+  background: radial-gradient(ellipse at 92% 8%, rgba(145, 183, 222, 0.14), transparent 28%),
     radial-gradient(ellipse at 8% 38%, rgba(224, 182, 111, 0.08), transparent 32%),
     linear-gradient(180deg, var(--color-header) 0%, var(--color-canvas) 32%, #0c1525 100%);
 }
