@@ -1,8 +1,68 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;900&display=swap');
 
+:root {
+  color-scheme: dark;
+  --color-canvas: #0b1220;
+  --color-surface: #162238;
+  --color-header: #0f192a;
+  --color-main: #91b7de;
+  --color-accent: #e0b66f;
+  --color-mist: #1d2c45;
+  --color-primary: var(--color-main);
+  --color-ink: #f4f1ea;
+  --color-ink-muted: #bdc7d5;
+  --color-line: #59708c;
+  --color-shadow: rgba(0, 0, 0, 0.34);
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-canvas);
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+}
+
 #app {
   font-family: 'Noto Sans JP', sans-serif;
   font-weight: 400;
+  color: var(--color-ink);
+  background: radial-gradient(ellipse at 92% 8%, rgba(145, 183, 222, 0.14), transparent 28%),
+    radial-gradient(ellipse at 8% 38%, rgba(224, 182, 111, 0.08), transparent 32%),
+    linear-gradient(180deg, var(--color-header) 0%, var(--color-canvas) 32%, #0c1525 100%);
+}
+
+.v-application {
+  background: transparent !important;
+}
+
+.v-card {
+  border: 1px solid var(--color-line);
+  background-color: rgba(22, 34, 56, 0.94) !important;
+  box-shadow: 0 12px 32px var(--color-shadow) !important;
+}
+
+.v-card.bg-transparent {
+  border-color: transparent;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.v-chip {
+  border-color: var(--color-line);
+  background: rgba(224, 182, 111, 0.12);
+}
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: var(--color-surface);
+  background: var(--color-primary);
 }
 
 .fontNormal {

@@ -66,7 +66,7 @@ watch(
             </template>
           </v-tooltip>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="onClose(false)">Close</v-btn>
+          <v-btn color="primary" variant="flat" @click="onClose(false)">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

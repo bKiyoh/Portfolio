@@ -1,13 +1,31 @@
 <script setup lang="ts">
-import type { Career, Product } from '@/types/global';
+import type { Career, CareerAchievement, Product } from '@/types/global';
 import { useCalculateDuration } from '@/stores/calculateDuration';
 import ProductDialog from '@/components/ProductDialog.vue';
 import { useProductImages } from '@/stores/productImages';
-import { ref, computed } from 'vue';
-import { mdiDomain, mdiSchool, mdiFaceMan, mdiTableFurniture, mdiLaptop } from '@mdi/js';
+import { computed, ref } from 'vue';
+import {
+  mdiBriefcaseOutline,
+  mdiCodeBraces,
+  mdiDomain,
+  mdiFaceMan,
+  mdiLaptop,
+  mdiSchool,
+  mdiTableFurniture
+} from '@mdi/js';
 import dayjs from 'dayjs';
 
+type TimelineAchievement = Product & {
+  achievementId: number;
+  genre: string;
+  to: string | null;
+  responsibility: string | null;
+  teamSize: string | number | null;
+  scopeOfWork: string | null;
+};
+
 const productImages = useProductImages().imgUrlsMap;
+const durationStore = useCalculateDuration();
 
 const props = defineProps<{
   careerList: Array<Career>;
@@ -26,45 +44,73 @@ const selectedProduct = ref<Product>({
   imgSrc: null
 });
 
-const careerList = computed(() => {
-  const formatList = props.careerList.map((x) => ({
-    ...x,
-    endDate: x.endDate === '現在' ? dayjs().format('YYYY/MM') : x.endDate,
-    achievements: x.achievements
-      ? x.achievements.sort((a, b) => {
-          const dateA = dayjs(a.from, 'YYYY/MM');
-          const dateB = dayjs(b.from, 'YYYY/MM');
-          return dateB.valueOf() - dateA.valueOf();
-        })
-      : []
-  }));
-  return formatList.sort(
-    (a, b) => dayjs(b.startDate, 'YYYY/MM').valueOf() - dayjs(a.startDate, 'YYYY/MM').valueOf()
-  );
-});
+const toTimelineAchievement = (achievement: CareerAchievement): TimelineAchievement => {
+  return {
+    achievementId: achievement.achievementId,
+    genre: achievement.genre,
+    productId: achievement.productId ?? '',
+    title: achievement.title ?? '',
+    description: achievement.description ?? '',
+    from: achievement.from ?? '',
+    to: achievement.to ?? null,
+    responsibility: achievement.responsibility ?? null,
+    teamSize: achievement.teamSize ?? null,
+    technologyUsed: achievement.technologyUsed ?? [],
+    scopeOfWork: achievement.scopeOfWork ?? null,
+    pageUrl: achievement.pageUrl ?? '',
+    gitHubSrc: achievement.gitHubSrc ?? '',
+    imgSrc: null
+  };
+};
 
-const prefixTitle = (genre: string) => {
-  if (genre === 'work') return 'Work on';
-  if (genre === 'soloDev') return 'Released';
-  return '';
+const careerList = computed(() =>
+  props.careerList
+    .map((career) => ({
+      ...career,
+      achievements: [...career.achievements]
+        .filter((achievement) => props.genre === 'all' || achievement.genre === props.genre)
+        .map(toTimelineAchievement)
+        .sort(
+          (a, b) =>
+            dayjs(b.from || '1900/01', 'YYYY/MM').valueOf() -
+            dayjs(a.from || '1900/01', 'YYYY/MM').valueOf()
+        )
+    }))
+    .filter((career) => career.achievements.length > 0)
+    .sort(
+      (a, b) => dayjs(b.startDate, 'YYYY/MM').valueOf() - dayjs(a.startDate, 'YYYY/MM').valueOf()
+    )
+);
+
+const genreLabel = (genre: string) => {
+  if (genre === 'work') return '実務経験';
+  if (genre === 'soloDev') return '個人開発';
+  return '学歴';
+};
+
+const genreIcon = (genre: string) => {
+  if (genre === 'work') return mdiBriefcaseOutline;
+  if (genre === 'soloDev') return mdiCodeBraces;
+  return mdiSchool;
+};
+
+const careerRole = (career: Career) =>
+  [career.department, career.position].filter(Boolean).join(' / ');
+
+const achievementPeriod = (achievement: TimelineAchievement) =>
+  [achievement.from, achievement.to].filter(Boolean).join(' – ');
+
+const teamSizeLabel = (teamSize: TimelineAchievement['teamSize']) => {
+  const value = String(teamSize);
+  return /^\d+名/.test(value) ? value : value.replace(/^(\d+)/, '$1名');
 };
 
 const closeDialog = (isOpen: boolean) => {
   isDialogOpen.value = isOpen;
 };
 
-// 型整理
-const onShowProductDetails = (item: any) => {
-  selectedProduct.value = {
-    productId: item.productId,
-    title: item.title,
-    description: item.description,
-    pageUrl: item.pageUrl,
-    gitHubSrc: item.gitHubSrc,
-    technologyUsed: item.technologyUsed,
-    from: item.from,
-    imgSrc: item.imgSrc
-  };
+const onShowProductDetails = (item: TimelineAchievement) => {
+  selectedProduct.value = item;
   isDialogOpen.value = true;
 };
 
@@ -77,118 +123,159 @@ const getIconName = (jobIcon: string) => {
     laptop: mdiLaptop
   };
 
-  return iconMapping[jobIcon] || '';
+  return iconMapping[jobIcon] || mdiDomain;
 };
 </script>
 
 <template>
-  <v-timeline side="end" align="start" v-if="$vuetify.display?.mdAndUp">
+  <v-timeline v-if="$vuetify.display?.mdAndUp" side="end" align="start">
     <v-timeline-item
-      size="x-small"
-      dot-color="grey-darken-3"
       v-for="career in careerList"
       :key="career.careerId"
+      size="x-small"
+      dot-color="primary"
     >
-      <template v-slot:opposite v-if="career.startDate || career.endDate">
-        <div style="text-align: left">
-          <p v-tooltip:bottom="career.company" style="cursor: pointer">
-            <v-icon :icon="mdiDomain"></v-icon>&nbsp;
-            <v-icon :icon="getIconName(career.jobIcon)"></v-icon>
+      <template #opposite>
+        <div class="employer-meta">
+          <p class="employer-name">
+            <v-icon :icon="getIconName(career.jobIcon)" size="18" /> {{ career.company }}
           </p>
-          <p v-if="career.careerId !== 0">
-            {{ useCalculateDuration().dateRange(career.startDate, career.endDate) }}
+          <p>{{ career.startDate }} – {{ career.endDate }}</p>
+          <p v-if="career.careerId !== 0" class="duration">
+            {{ durationStore.dateRange(career.startDate, career.endDate) }}
           </p>
         </div>
       </template>
 
-      <template
-        v-for="achieve in props.genre === 'all'
-          ? career.achievements
-          : career.achievements.filter((x) => x.genre === props.genre)"
-        :key="achieve.description"
-      >
-        <v-card class="my-4">
-          <v-card-item>
-            <v-card-subtitle v-if="achieve.from" class="pb-0">
-              <span v-if="career.careerId !== 0" class="me-2">
-                {{ achieve.from }}
-                <template v-if="achieve.to">- {{ achieve.to }}</template>
-              </span>
-              {{ prefixTitle(achieve.genre) }}
-              <template v-if="achieve.genre === 'soloDev'">
-                <a
-                  class="ps-1 text-decoration-underline text-blue-lighten-4 font-weight-bold"
-                  style="cursor: pointer"
-                  @click="onShowProductDetails(achieve)"
-                >
-                  {{ achieve.title }}
-                </a>
-              </template>
-              <template v-else>
-                <span class="ps-1 font-weight-bold">{{ achieve.title }}</span>
-              </template>
-            </v-card-subtitle>
+      <div v-if="careerRole(career) || career.responsibilities" class="career-context">
+        <p v-if="careerRole(career)" class="career-role">{{ careerRole(career) }}</p>
+        <p v-if="career.responsibilities" class="career-story">{{ career.responsibilities }}</p>
+      </div>
 
-            <v-card-text
-              v-if="achieve.responsibility"
-              class="mt-2 pa-1 font-weight-thin text-grey-lighten-1"
+      <v-card
+        v-for="achievement in career.achievements"
+        :key="achievement.achievementId"
+        class="achievement-card my-4"
+      >
+        <v-card-item>
+          <div class="achievement-meta">
+            <span class="genre-icon" :aria-label="genreLabel(achievement.genre)">
+              <v-icon :icon="genreIcon(achievement.genre)" size="18" />
+            </span>
+            <span v-if="achievement.from">{{ achievementPeriod(achievement) }}</span>
+          </div>
+
+          <v-card-title class="achievement-title">
+            <button
+              v-if="achievement.genre === 'soloDev'"
+              type="button"
+              class="product-link"
+              @click="onShowProductDetails(achievement)"
             >
-              <p v-if="achieve.description">{{ achieve.description }}</p>
-              <p class="mb-1" v-if="achieve.responsibility">担当:{{ achieve.responsibility }}</p>
-              <div class="mb-1" v-if="achieve.technologyUsed">
-                使用技術：{{ achieve.technologyUsed.join(', ') }}
-              </div>
-              <p class="mb-1" v-if="achieve.scopeOfWork">作業範囲：{{ achieve.scopeOfWork }}</p>
-            </v-card-text>
-          </v-card-item>
-        </v-card>
-      </template>
+              {{ achievement.title }}
+            </button>
+            <span v-else>{{ achievement.title }}</span>
+          </v-card-title>
+
+          <v-card-text class="achievement-copy px-0 pb-0">
+            <p v-if="achievement.description" class="achievement-description">
+              {{ achievement.description }}
+            </p>
+            <div class="detail-list">
+              <p v-if="achievement.responsibility">
+                <span>役割</span>{{ achievement.responsibility }}
+              </p>
+              <p v-if="achievement.teamSize">
+                <span>チーム</span>{{ teamSizeLabel(achievement.teamSize) }}
+              </p>
+              <p v-if="achievement.scopeOfWork">
+                <span>担当範囲</span>{{ achievement.scopeOfWork }}
+              </p>
+            </div>
+            <div v-if="achievement.technologyUsed.length" class="technology-list">
+              <v-chip
+                v-for="technology in achievement.technologyUsed"
+                :key="technology"
+                size="small"
+                variant="outlined"
+              >
+                {{ technology }}
+              </v-chip>
+            </div>
+          </v-card-text>
+        </v-card-item>
+      </v-card>
     </v-timeline-item>
   </v-timeline>
 
-  <v-container v-if="$vuetify.display?.smAndDown">
-    <v-row v-for="career in careerList" :key="career.careerId">
-      <v-col>
-        <v-card>
-          <v-card-item>
-            <v-card-title hide-details>{{ career.company }}</v-card-title>
-            <v-card-subtitle v-if="career.startDate || career.endDate" class="me-1">
-              <p>
-                {{ career.startDate }} - {{ career.endDate }} ({{
-                  useCalculateDuration().dateRange(career.startDate, career.endDate)
-                }})
-              </p>
-            </v-card-subtitle>
-            <v-card-subtitle>
-              <span class="me-1">{{ career.department }}{{ career.position }}</span>
-            </v-card-subtitle>
-          </v-card-item>
-          <v-card-text>
-            {{ career.responsibilities }}
-          </v-card-text>
+  <v-container v-else class="mobile-timeline px-0">
+    <v-card v-for="career in careerList" :key="career.careerId" class="career-card mb-6">
+      <v-card-item>
+        <div class="mobile-career-period">
+          {{ career.startDate }} – {{ career.endDate }}
+          <span v-if="career.careerId !== 0">
+            （{{ durationStore.dateRange(career.startDate, career.endDate) }}）
+          </span>
+        </div>
+        <v-card-title class="mobile-company-title">{{ career.company }}</v-card-title>
+        <v-card-subtitle v-if="careerRole(career)">{{ careerRole(career) }}</v-card-subtitle>
+        <p v-if="career.responsibilities" class="mobile-career-story">
+          {{ career.responsibilities }}
+        </p>
+      </v-card-item>
 
-          <v-divider class="mx-4 mb-1" v-if="career.achievements.length > 0" />
+      <v-divider class="mx-4" />
 
-          <v-card-item
-            v-for="achievement in career.achievements.filter((x) => x.genre === 'work')"
-            :key="achievement.achievementId"
+      <v-card-item
+        v-for="achievement in career.achievements"
+        :key="achievement.achievementId"
+        class="mobile-achievement"
+      >
+        <div class="achievement-meta">
+          <span class="genre-icon" :aria-label="genreLabel(achievement.genre)">
+            <v-icon :icon="genreIcon(achievement.genre)" size="18" />
+          </span>
+          <span v-if="achievement.from">{{ achievementPeriod(achievement) }}</span>
+        </div>
+        <v-card-title class="achievement-title">
+          <button
+            v-if="achievement.genre === 'soloDev'"
+            type="button"
+            class="product-link"
+            @click="onShowProductDetails(achievement)"
           >
-            <v-card-title>{{ achievement.title }}</v-card-title>
-            <v-card-text>
-              <v-card-subtitle v-if="achievement.from"
-                >{{ achievement.from }} - {{ achievement.to }}</v-card-subtitle
-              >
-              <p v-if="achievement.responsibility">担当 ：{{ achievement.responsibility }}</p>
-              <p v-if="achievement.technologyUsed">
-                使用技術：{{ achievement.technologyUsed.join(', ') }}
-              </p>
-              <p v-if="achievement.scopeOfWork">作業範囲：{{ achievement.scopeOfWork }}</p>
-            </v-card-text>
-          </v-card-item>
-        </v-card>
-      </v-col>
-    </v-row>
+            {{ achievement.title }}
+          </button>
+          <span v-else>{{ achievement.title }}</span>
+        </v-card-title>
+        <v-card-text class="achievement-copy px-0 pb-1">
+          <p v-if="achievement.description" class="achievement-description">
+            {{ achievement.description }}
+          </p>
+          <div class="detail-list">
+            <p v-if="achievement.responsibility">
+              <span>役割</span>{{ achievement.responsibility }}
+            </p>
+            <p v-if="achievement.teamSize">
+              <span>チーム</span>{{ teamSizeLabel(achievement.teamSize) }}
+            </p>
+            <p v-if="achievement.scopeOfWork"><span>担当範囲</span>{{ achievement.scopeOfWork }}</p>
+          </div>
+          <div v-if="achievement.technologyUsed.length" class="technology-list">
+            <v-chip
+              v-for="technology in achievement.technologyUsed"
+              :key="technology"
+              size="small"
+              variant="outlined"
+            >
+              {{ technology }}
+            </v-chip>
+          </div>
+        </v-card-text>
+      </v-card-item>
+    </v-card>
   </v-container>
+
   <ProductDialog
     :is-opening="isDialogOpen"
     :product="selectedProduct"
@@ -197,4 +284,135 @@ const getIconName = (jobIcon: string) => {
   />
 </template>
 
-<style scoped></style>
+<style scoped>
+.employer-meta {
+  max-width: 180px;
+  color: var(--color-ink-muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.employer-icons {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+  color: var(--color-main);
+}
+
+.employer-name,
+.career-role {
+  color: var(--color-ink);
+  font-weight: 900;
+}
+
+.duration {
+  color: var(--color-main);
+}
+
+.career-context {
+  padding: 4px 4px 2px;
+}
+
+.career-role {
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+.career-story,
+.mobile-career-story {
+  color: var(--color-ink-muted);
+  font-size: 0.84rem;
+  line-height: 1.8;
+}
+
+.achievement-card {
+  overflow: hidden;
+}
+
+.achievement-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 16px;
+  color: var(--color-main);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.genre-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-main);
+}
+
+.achievement-title {
+  padding: 6px 0 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  white-space: normal;
+}
+
+.product-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-main);
+  font: inherit;
+  font-weight: 900;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.achievement-copy {
+  color: var(--color-ink-muted);
+  font-size: 0.82rem;
+  line-height: 1.75;
+}
+
+.achievement-description {
+  margin-bottom: 10px;
+  color: var(--color-ink);
+}
+
+.detail-list {
+  display: grid;
+  gap: 4px;
+}
+
+.detail-list span {
+  display: inline-block;
+  width: 5.5em;
+  color: var(--color-ink);
+  font-weight: 900;
+}
+
+.technology-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.mobile-career-period {
+  margin-bottom: 4px;
+  color: var(--color-main);
+  font-size: 0.75rem;
+}
+
+.mobile-company-title {
+  padding: 0;
+  font-size: 1.1rem;
+  white-space: normal;
+}
+
+.mobile-career-story {
+  margin-top: 14px;
+}
+
+.mobile-achievement + .mobile-achievement {
+  border-top: 1px solid var(--color-line);
+}
+</style>

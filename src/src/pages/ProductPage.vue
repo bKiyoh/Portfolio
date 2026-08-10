@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Product } from '@/types/global';
+import type { Career, CareerAchievement, Product } from '@/types/global';
 import { onBeforeMount, reactive } from 'vue';
 import ProductDialog from '@/components/ProductDialog.vue';
-import productList from '@/assets/data/productList.json';
+import careerList from '@/assets/data/careerList.json';
 import { useProductImages } from '@/stores/productImages';
 
 const productImages = useProductImages().imgUrlsMap;
@@ -24,8 +24,23 @@ const closeDialog = (isOpen: boolean) => {
   state.isDialogOpen = isOpen;
 };
 
+const toProduct = (achievement: CareerAchievement): Product => ({
+  productId: achievement.productId ?? '',
+  title: achievement.title ?? '',
+  description: achievement.description ?? '',
+  pageUrl: achievement.pageUrl ?? '',
+  gitHubSrc: achievement.gitHubSrc ?? '',
+  technologyUsed: achievement.technologyUsed ?? [],
+  from: achievement.from ?? '',
+  imgSrc: null
+});
+
 const fetchProductList = async () => {
-  state.productList = productList;
+  state.productList = (careerList as Career[])
+    .flatMap((career) => career.achievements)
+    .filter((achievement) => achievement.genre === 'soloDev' && achievement.productId)
+    .map(toProduct)
+    .sort((a, b) => Number(a.productId) - Number(b.productId));
 };
 
 onBeforeMount(() => fetchProductList());
