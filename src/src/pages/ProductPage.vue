@@ -47,26 +47,28 @@ onBeforeMount(() => fetchProductList());
 </script>
 
 <template>
-  <v-container>
-    <v-row>
-      <v-col v-for="item of state.productList" :key="item.productId" cols="12" sm="1" md="6">
-        <v-container>
-          <v-row>
-            <v-col class="ma-6">
-              <v-card elevation="0" @click="onShowProductDetails(item)">
-                <v-img
-                  :src="productImages.get(`product${item.productId}`)"
-                  height="230"
-                  aspect-ratio="16/9"
-                  cover
-                >
-                </v-img>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-col>
-    </v-row>
+  <v-container class="product-list">
+    <div class="product-grid">
+      <v-card
+        v-for="item of state.productList"
+        :key="item.productId"
+        class="product-card"
+        elevation="0"
+        role="button"
+        tabindex="0"
+        :aria-label="`${item.title}の詳細を見る`"
+        @click="onShowProductDetails(item)"
+        @keydown.enter="onShowProductDetails(item)"
+        @keydown.space.prevent="onShowProductDetails(item)"
+      >
+        <v-img
+          :src="productImages.get(`product${item.productId}`)"
+          height="230"
+          aspect-ratio="16/9"
+          cover
+        />
+      </v-card>
+    </div>
   </v-container>
   <ProductDialog
     :is-opening="state.isDialogOpen"
@@ -76,4 +78,26 @@ onBeforeMount(() => fetchProductList());
   />
 </template>
 
-<style scoped></style>
+<style scoped>
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 24px;
+}
+
+.product-card {
+  min-width: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .product-list {
+    padding-inline: 16px;
+  }
+
+  .product-grid {
+    gap: 16px;
+  }
+}
+</style>

@@ -27,19 +27,27 @@ watch(
 
 <template>
   <div class="text-center">
-    <v-dialog v-if="props.isOpening" v-model="state.isOpening" width="auto" persistent>
-      <v-card max-width="500">
-        <v-card-title>
+    <v-dialog
+      v-if="props.isOpening"
+      v-model="state.isOpening"
+      class="product-dialog"
+      max-width="500"
+      persistent
+    >
+      <v-card width="100%">
+        <v-card-title class="dialog-title">
           {{ product.title }}
         </v-card-title>
         <v-img :src="props.productImage" max-height="400" cover> </v-img>
-        <v-card-subtitle> From：{{ product.from }} </v-card-subtitle>
-        <v-card-text>
+        <v-card-subtitle class="dialog-subtitle"> From：{{ product.from }} </v-card-subtitle>
+        <v-card-text class="dialog-copy">
           {{ product.description }}
           <br />
-          <v-chip-group>
-            <v-chip v-for="item in product.technologyUsed" :key="item" x-small>{{ item }}</v-chip>
-          </v-chip-group>
+          <div class="dialog-technologies">
+            <v-chip v-for="item in product.technologyUsed" :key="item" size="small">
+              {{ item }}
+            </v-chip>
+          </div>
         </v-card-text>
 
         <v-card-actions>
@@ -73,4 +81,33 @@ watch(
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.dialog-title,
+.dialog-subtitle,
+.dialog-copy {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.dialog-title {
+  line-height: 1.5;
+}
+
+.dialog-technologies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+@media (max-width: 600px) {
+  .dialog-title {
+    padding: 16px;
+    font-size: 1.05rem;
+  }
+
+  .dialog-copy {
+    padding: 16px;
+  }
+}
+</style>
