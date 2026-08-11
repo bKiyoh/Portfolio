@@ -54,7 +54,8 @@ onBeforeMount(() => {
         <v-card class="career-summary">
           <v-card-item>
             <v-card-title class="summary-title">
-              Vue.jsを中心とするフロントエンドエンジニア
+              <span class="summary-title-part">Vue.jsを中心とする</span>
+              <span class="summary-title-part">フロントエンドエンジニア</span>
             </v-card-title>
           </v-card-item>
           <v-card-text>
@@ -73,7 +74,14 @@ onBeforeMount(() => {
     <v-row>
       <v-col>
         <v-card color="transparent">
-          <v-tabs v-model="tab" align-tabs="center" grow slider-color="primary" color="primary">
+          <v-tabs
+            v-model="tab"
+            class="career-tabs"
+            align-tabs="center"
+            grow
+            slider-color="primary"
+            color="primary"
+          >
             <template v-for="(tabValue, i) of tabValues" :key="i">
               <v-tab class="no-uppercase" :value="tabValue.value">
                 <v-icon :icon="tabValue.icon" size="18" class="me-2" />
@@ -115,12 +123,20 @@ onBeforeMount(() => {
 }
 
 .summary-title {
+  display: flex;
+  flex-wrap: wrap;
   padding-top: 6px;
   color: var(--color-ink);
   font-size: clamp(1.05rem, 3vw, 1.35rem);
   font-weight: 900;
   line-height: 1.5;
   white-space: normal;
+}
+
+.summary-title-part {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .summary-copy {
@@ -142,5 +158,17 @@ onBeforeMount(() => {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 18px;
+}
+
+@media (max-width: 600px) {
+  .career-tabs :deep(.v-tab) {
+    min-width: 0;
+    padding-inline: 6px;
+    font-size: 0.78rem;
+  }
+
+  .career-tabs :deep(.v-icon) {
+    display: none;
+  }
 }
 </style>
