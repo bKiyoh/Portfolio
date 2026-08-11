@@ -1,4 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import videoSource from '@/assets/video/IMG_8193.mp4';
+import posterSource from '@/assets/video/IMG_8193-poster.jpg';
+</script>
 
 <template>
   <v-container>
@@ -6,11 +9,16 @@
       <v-col class="ma-1">
         <video
           class="hero-video"
-          src="../assets/video/IMG_8193.mp4"
+          :src="videoSource"
+          :poster="posterSource"
+          width="128"
+          height="720"
+          preload="metadata"
           autoplay
           loop
           muted
           playsinline
+          aria-hidden="true"
         ></video>
       </v-col>
     </v-row>
