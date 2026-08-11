@@ -134,7 +134,9 @@ onBeforeMount(() => {
 }
 
 .summary-title-part {
-  white-space: nowrap;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .summary-copy {
