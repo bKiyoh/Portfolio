@@ -176,7 +176,6 @@ onBeforeUnmount(() => {
 }
 
 .site-header {
-  border-bottom: 1px solid var(--color-line);
   box-shadow: none !important;
 }
 

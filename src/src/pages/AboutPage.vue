@@ -2,6 +2,8 @@
 import TopAbout from '@/components/TopAbout.vue';
 </script>
 <template>
-  <TopAbout />
+  <v-container>
+    <TopAbout />
+  </v-container>
 </template>
 <style scoped></style>

@@ -54,6 +54,11 @@ import ContactPage from '@/pages/ContactPage.vue';
   scroll-margin-top: 64px;
 }
 
+.page-section:not(.page-section--home) {
+  width: 50.8vw;
+  margin-inline: auto;
+}
+
 .page-section:not(.page-section--home)::before {
   position: absolute;
   top: 0;
@@ -91,6 +96,12 @@ import ContactPage from '@/pages/ContactPage.vue';
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 900;
   letter-spacing: 0.04em;
+}
+
+@media (max-width: 959px) {
+  .page-section:not(.page-section--home) {
+    width: 100%;
+  }
 }
 
 @media (max-width: 768px) {
