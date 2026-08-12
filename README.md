@@ -1,33 +1,28 @@
-# ポートフォリオサイト
+# Portfolio
 
-このサイトは 2022/9~2023/10 間のフロントエンド開発で得た知見を活かして作成しました
+Vue 3、TypeScript、Vuetifyで制作した個人ポートフォリオサイトです。プロフィール、職務経歴、個人開発プロダクト、連絡先を1ページにまとめています。
 
-### 使用技術一覧
+**公開サイト:** [https://portfolio-dlh.pages.dev/](https://portfolio-dlh.pages.dev/)
 
-- **Vue.js** (^3.2.47)
-  - 最新の JavaScript フレームワークである Vue.js（バージョン 3.2.47）を採用しました。
+## 主な機能
 
-- **Vuetify** (^3.2.2)
-  - マテリアルデザインの UI コンポーネントを提供する Vuetify（バージョン 3.2.2）を採用し、見栄えの良いインターフェースを構築しました。
+- Three.jsとWebGLシェーダーを使ったアニメーション付きのヒーロー表示
+- About、Timeline、Product、Contactをまとめたレスポンシブなシングルページ構成
+- 実務経験・個人開発を切り替えられるタイムライン
+- プロダクトの画像、使用技術、関連リンクを確認できる詳細ダイアログ
 
-- **Vue Router** (^4.1.6)
-  - ルーティング機能を提供する Vue Router（バージョン 4.1.6）を採用し、ページ間の移動を容易にしました。
+## 使用技術
 
-- **@mdi/js** (^7.2.96)
-  - Material Design Icons を提供する@mdi/js（バージョン 7.2.96）を使用して、アイコンの表示に活用しました。
+| 分類                | 技術                             |
+| ------------------- | -------------------------------- |
+| フロントエンド      | Vue 3、TypeScript                |
+| UI                  | Vuetify 3、Material Design Icons |
+| 3D / アニメーション | Three.js、WebGL / GLSL           |
+| 状態管理            | Pinia                            |
+| ルーティング        | Vue Router                       |
+| 日付処理            | Day.js                           |
+| ビルド              | Vite                             |
+| 品質管理            | ESLint、Prettier、vue-tsc        |
+| ホスティング        | Cloudflare Pages                 |
 
-- **Dayjs** (^1.11.10)
-  - 軽量で使いやすい日付操作ライブラリである Dayjs（バージョン 1.11.10）を採用し、日付や時間の処理を行いました。
-
-- **Pinia** (^2.0.32)
-  - Vue.js アプリケーションのための状態管理ライブラリである Pinia（バージョン 2.0.32）を使用し、データの管理や共有を行いました。
-
-- **Cloudflare Pages**
-  - GitHubと連携し、ビルド済みの静的ファイルをCloudflareのネットワークから配信します。
-
-- **TypeScript** (~4.8.4)
-  - 強力な静的型付け言語である TypeScript（バージョン 4.8.4）を導入し、コードの信頼性向上や開発効率の向上に貢献しました。
-
-### 実装ページ
-
-[https://portfolio-dlh.pages.dev/](https://portfolio-dlh.pages.dev/)
+各パッケージの正確なバージョンは[`src/package.json`](src/package.json)を参照してください。
