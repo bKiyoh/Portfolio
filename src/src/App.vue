@@ -7,7 +7,7 @@ provide('selectSection', selectSection);
 
 const contentWidth = ref('');
 const ratio = 0.508;
-const mobileSize = 768;
+const mobileSize = 959;
 const isMobile = ref(false);
 
 const calculateContentWidth = () => {
@@ -37,14 +37,7 @@ onBeforeUnmount(() => {
   <v-app>
     <NavigationDrawer :content-width="isMobile ? undefined : contentWidth" />
     <v-main>
-      <div
-        :style="{
-          maxWidth: isMobile ? 'none' : contentWidth,
-          margin: isMobile ? '0' : '0 auto'
-        }"
-      >
-        <router-view />
-      </div>
+      <router-view />
     </v-main>
   </v-app>
 </template>

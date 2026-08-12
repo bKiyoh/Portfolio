@@ -11,8 +11,6 @@ import posterSource from '@/assets/video/IMG_8193-poster.jpg';
           class="hero-video"
           :src="videoSource"
           :poster="posterSource"
-          width="128"
-          height="720"
           preload="metadata"
           autoplay
           loop
@@ -30,6 +28,7 @@ import posterSource from '@/assets/video/IMG_8193-poster.jpg';
   display: block;
   width: auto;
   height: 340px;
+  aspect-ratio: 128 / 720;
   box-shadow: 0 12px 30px var(--color-shadow);
   filter: saturate(0.76) sepia(0.08) contrast(0.94);
 }
